@@ -29,22 +29,35 @@ public class Mouvement {
 		return "[" + deltaX + ", " + deltaY + "]";
 	}
 
+	// plus simple à visualiser sur un pavé numérique
 	public int moveCode() {
-		if (deltaX == 1) {
-			if (deltaY == 0) {
+
+		if (deltaX == 0) {
+
+			if (deltaY == 1) {
+
+				return 0;
+
+			} else if (deltaY == -1) {
+
 				return 4;
-			} else if (deltaY == 1) {
-				return 3;
 			}
 		}
-		if (deltaX == 0 && deltaY == 1) {
-			return 2;
-		}
+
 		if (deltaX == -1) {
-			if (deltaY == 1) {
+
+			if (deltaY == 0) {
+
+				return 2;
+
+			} else if (deltaY == 1) {
+
+				return 3;
+
+			} else if (deltaY == -1) {
+
 				return 1;
-			} else if (deltaY == 0) {
-				return 0;
+
 			}
 		}
 		return -1;

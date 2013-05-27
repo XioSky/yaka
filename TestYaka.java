@@ -2,18 +2,22 @@ package yaka;
 
 public class TestYaka {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
+		int[] pos = new int[2];
 
 		Plateau p = new Plateau();
 
+		Mouvement m;
+		System.out.println(Mouvements.getMouvement(2));
 		p.initialize();
 		System.out.println(p);
-		// System.out.println(Plateau.plateau[1][6].allowedMove(Mouvements.AHEAD));
-		Plateau.plateau[1][3].move(Mouvements.RIGHT_AHEAD);
-		// Plateau.plateau[5][1].move(Mouvements.RIGHT);
+		pos = Piece.location();
+		m = Piece.newLocation();
+		// System.out.println("main display :    " + (pos[0] + 1) + ", "
+		// + (char) (pos[1] + 'a') + " : " + m);
+
+		Plateau.plateau[pos[0]][pos[1]].move(m);
+
 		System.out.println(p);
 
 	}

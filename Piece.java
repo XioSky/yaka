@@ -1,7 +1,9 @@
 package yaka;
 
+import java.util.Scanner;
+
 /*
- * @author Adhémar Wissocq
+ * @authors Adhémar Wissocq, Theo Plockyn, Antoine Deranton
  * 
  */
 public abstract class Piece {
@@ -16,7 +18,7 @@ public abstract class Piece {
 	public Piece(int x, int y, int couleur) {
 		this.x = x;
 		this.y = y;
-		this.setCouleur(couleur);
+		this.couleur = couleur;
 	}
 
 	public char getCode() {
@@ -31,19 +33,11 @@ public abstract class Piece {
 		return this.y;
 	}
 
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
 	@Override
 	public String toString() {
 		String str;
 
-		str = "[" + this.x + ", " + this.y + "] : ";
+		str = "[" + (this.x + 1) + ", " + (char) (this.y + 'a') + "] : ";
 		str += this.getCode() + " ";
 
 		if (this.couleur == Piece.BLANC) {
@@ -59,44 +53,96 @@ public abstract class Piece {
 		return couleur;
 	}
 
-	public void setCouleur(int couleur) {
-		this.couleur = couleur;
-	}
-
+	// vide une case (pour mouvements)
 	private void clear(int x, int y) {
 		Plateau.plateau[x][y] = new PieceVide(x, y, 0);
+	}
+
+	public static int[] location() {
+		int pos[] = new int[2];
+		String userEntry;
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("Quel pion désirez-vous déplacer ? ");
+		// solution temporaire, que je modifierai par la suite par un
+		// try{...}catch()
+		do {
+			userEntry = sc.nextLine();
+			if (userEntry.charAt(0) > 96) {
+				pos[1] = userEntry.charAt(0) - 'a';
+				pos[0] = userEntry.charAt(1) - '1';
+			} else {
+				pos[1] = userEntry.charAt(1) - 'a';
+				pos[0] = userEntry.charAt(0) - '1';
+			}
+
+		} while (!validLocation(userEntry));
+
+		return pos;
+	}
+
+	private static boolean validLocation(String entry) {
+		if (entry.length() != 2) {
+			return false;
+		}
+		if (entry.charAt(0) >= 'a' && entry.charAt(0) <= 'h'
+				&& entry.charAt(1) >= '1' && entry.charAt(1) <= '8') {
+			return true;
+		} else if (entry.charAt(1) >= 'a' && entry.charAt(1) <= 'h'
+				&& entry.charAt(0) >= '1' && entry.charAt(0) <= '8') {
+			return true;
+		}
+		return false;
+	}
+
+	public static Mouvement newLocation() {
+		int codeMouvement;
+		Mouvement m;
+
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("Code mouvement :  ");
+
+		codeMouvement = sc.nextInt();
+
+		m = new Mouvement(Mouvements.getMouvement(codeMouvement).getDeltaX(),
+				Mouvements.getMouvement(codeMouvement).getDeltaY());
+		sc.close();
+
+		return m;
 	}
 
 	public void move(Mouvement m) {
 		int couleur;
 		int tmpX, tmpY;
+
 		if (this.allowedMove(m)) {
-			tmpX = this.x + this.couleur * m.getDeltaX();
-			tmpY = this.y + this.couleur * m.getDeltaY();
+
+			tmpX = this.getX() + this.couleur * m.getDeltaX();
+			tmpY = this.getY() + this.couleur * m.getDeltaY();
 			couleur = this.getCouleur();
-			System.out.println(Plateau.plateau[6][2]);
+
 			if (this.getCode() == 'r' || this.getCode() == 'R') {
 
-				clear(this.x, this.y);
+				clear(this.getX(), this.getY());
 				Plateau.plateau[tmpX][tmpY] = new PieceRonde(tmpX, tmpY,
 						couleur);
 				return;
-			} else if (this.getCode() == 'c' || this.getCode() == 'C') {
-				System.out.println(this.x + ", " + this.y + "     " + tmpX
-						+ ", " + tmpY);
-				clear(this.x, this.y);
+			}
+
+			else if (this.getCode() == 'c' || this.getCode() == 'C') {
+
+				clear(this.getX(), this.getY());
 				Plateau.plateau[tmpX][tmpY] = new PieceCarree(tmpX, tmpY,
 						couleur);
 				return;
 			}
-			System.out.println("mouvement permis");
-			return;
+
 		}
-		System.out.println("rien");
 	}
 
 	public boolean allowedMove(Mouvement m) {
-		if (priseAdversaire(m) || pieceDeplacable(m)) {
+		if (pieceDeplacable(m) && !sortie(m)) {
 			return true;
 		}
 		return false;
@@ -106,18 +152,28 @@ public abstract class Piece {
 
 		int tmpX = this.x + (this.couleur * m.getDeltaX());
 		int tmpY = this.y + (this.couleur * m.getDeltaY());
-		if (tmpX < 0 || tmpX > 7 || tmpY < 0 || tmpY > 7) {
-			return false;
-		} else if (Plateau.plateau[tmpX][tmpY].getCode() == this.getCode()) {
-			return false;
+		if (!sortie(m)) {
+			if (Plateau.plateau[tmpX][tmpY].getCode() == '.') {
+
+				return true;
+			} else if (priseAdversaire(m)) {
+
+				return true;
+			}
+
 		}
 
-		return true;
+		return false;
 	}
 
 	private boolean sortie(Mouvement m) {
 		int tmpX = this.getX() + this.couleur * m.getDeltaX();
 		int tmpY = this.getY() + this.couleur * m.getDeltaY();
+
+		if (tmpX > 7 || tmpY < 0 || tmpY > 7) {
+
+			return true;
+		}
 
 		return false;
 	}
@@ -126,11 +182,12 @@ public abstract class Piece {
 		int tmpX = this.getX() + (this.couleur * m.getDeltaX());
 		int tmpY = this.getY() + (this.couleur * m.getDeltaY());
 		if (tmpX >= 0 && tmpX < 8 && tmpY >= 0 && tmpY < 7) {
-			if (Plateau.plateau[tmpX][tmpY].getCode() != this.getCode()
-					&& Plateau.plateau[tmpX][tmpY].getCode() != '.') {
+			if (Plateau.plateau[tmpX][tmpY].getCouleur() != this.getCouleur()
+					&& Plateau.plateau[tmpX][tmpY].getCouleur() != Piece.VIDE) {
 				return true;
 			}
 		}
 		return false;
 	}
+
 }

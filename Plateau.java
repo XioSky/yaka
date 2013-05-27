@@ -9,12 +9,12 @@ public class Plateau {
 
 	public void initialize() {
 		boolean tracerRond = true;
-		int couleur = -1;
+		int couleur = 1;
 
 		for (int i = 0; i < plateau.length; i++) {
 			for (int j = 0; j < plateau.length; j++) {
 				if (i > 5) {
-					couleur = 1;
+					couleur = -1;
 				}
 				if (tracerRond == true && (i < 2 || i > 5)) {
 					plateau[i][j] = new PieceRonde(i, j, couleur);
@@ -32,18 +32,29 @@ public class Plateau {
 
 	@Override
 	public String toString() {
-		String tmp = "";
-		for (int i = 0; i < plateau.length; ++i) {
-			tmp += i + " ";
+		String bordureHorizontale = "  _________________________________________"
+				+ "\n";
+		String tmp = bordureHorizontale;
+
+		for (int i = 7; i >= 0; --i) {
+
+			tmp += (i + 1) + "| ";
+
 			for (int j = 0; j < plateau.length; ++j) {
-				tmp += "[" + Plateau.plateau[i][j].getCode() + "]";
+
+				tmp += "  " + Plateau.plateau[i][j].getCode() + "  ";
 			}
-			tmp += "\n";
+
+			tmp += " |" + "\n";
 		}
+
+		tmp += bordureHorizontale;
 		tmp += "   ";
 		for (int i = 0; i < plateau.length; i++) {
-			tmp += i + "  ";
+
+			tmp += "  " + (char) ('a' + i) + "  ";
 		}
+
 		return tmp;
 	}
 }
