@@ -1,0 +1,53 @@
+Ici on notera des idées ou des modifs qui ont été apportées, ou qui seront à apporter au projet, ainsi que celui
+qui s'en chargera.
+
+------------------------------------------------------------------------------------------------------------------------
+@adhémar : je vais modifier le calcul des coordonnées pour entrer par exemple :  a2  ou 2a, etc...
+           pour une lecture plus simple des coordonnées, plutôt que se demander quel axe représente x,
+           et quel axe représente y :)    et le mot de la fin : goulag !!!
+           
+           edit : je vais coder la coordonnée tapée en String, comme ça je mettrai que si la valeur ascii 
+                  de String.charAt(i) est supérieure à 96, alors il faut que le calcul se fasse sur l'axe horizontal, 
+                  sinon sur l'axe vertical (pour pouvoir taper dans n'importe quel sens 
+                  b2(o) <-- sorry about that f*ckin' shit     ou 2b)
+                 
+@adhemar : affichage modifié, coordonnées des mouvements modifiées, conditions sur le move modifiées.
+           Peut-être y-a-t'il les conditions à optimiser. Mais ceci est secondaire pour l'instant.
+           Il ne me reste qu'à coder les coordonnées à entrer pour selectionner un Pion :)
+           
+           We're in a good way guys !
+           
+@ adhemar : le 26/05  21h02 -- Codage des coordonnées accompli. ex : si je tape 2e puis 2 le pion en 2,e se déplace
+                                 d'une case en avant !!!
+                                 
+                                 les méthodes sont déclarées static pour y avoir accès a partir du main
+------------------------------------------------------------------------------------------------------------------------
+                  
+@ adhemar : je m'attaque aux classes Coup, Joueur, et je ferai juste après le JoueurHasardPur (que j'ai nommé MonkeyIA)
+
+           edit : dès les 1eres étapes de déplacement (la 2e normalement) une piece ronde noire fait un mouvement vers
+                      l'avant, et se transforme en carré (WHAT ?!) et par la suite des pieces finissent par se dupliquer.
+                      il y a aussi un mouvement qui se fait : 8a [1,0]. Soit le pion 8a vers l'avant. Or a ce moment là
+                      la case 8a ne contient pas de piece !!! Et bim un carré apparaît
+
+@adhemar : Constructeur de Joueur modifié, pour la 2e ligne de pion, on obtenait une ligne identique à la première.
+           Ajout de parenthèse dans MonkeyIA, en effet on avait ((int) Math.random * coupSize); alors qu'il fallait
+           ((int) (Math.random * coupSize));
+           On a maintenant des mouvements purement aléatoires parmis la liste de coups jouables.
+           Un petit problème persiste : la duplication non attendue de pièces. J'ai aussi remarqué pour certain moves,
+           que (par exemple) un move d'une pièce carrée blanche change un rond noir en carré blanc ><
+           Je bosse là dessus les gens =)     
+          ***** p.s : ce serait cool de me tenir au courant sur quoi vous bossez en ce moment sur le yakalélo :p
+          
+          p.p.s : il reste un souci dans le constructeur de Joueur, ça viendra :)
+          
+          edit2 : la duplication vient du fait qu'un mouvement est effectué sur une pièce vide et de ce fait créé une
+                      pièce supplémentaire !!!
+                      
+@adhemar : Le plus gros a été réglé, il reste de la duplication, mais moins, et surtout, la liste de coup est a chaque 
+           fois mal mise à jour (voire pas du tout) ce qui fait que même s'il reste des coups jouables, la liste de 
+           coups jouables est vide.
+           
+@adhemar : j'ai bien épuré, il y avait des méthodes useless,  et le constructeur de Joueur était trop compliqué pour 
+           pas grand chose (constatez par vous-même xD), modif aussi de MonkeyIA, methode plus concise. 
+           Quant au Main, c'est ce que j'ai fait, mais hésitez pas à modifier pour faire vos tests :)
