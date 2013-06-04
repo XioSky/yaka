@@ -8,6 +8,7 @@ public class Coup {
 	public Coup(Piece piece, Mouvement m) {
 		this.piece = piece;
 		this.m = m;
+
 	}
 
 	public Piece getPiece() {
@@ -18,23 +19,35 @@ public class Coup {
 		return this.m;
 	}
 
-	public void doIt(Coup cp) {
+	public void doIt() {
 
-		if (winingMove(cp)) {
-			piece.move(m);
-			return;
+		if (!coupGagnant()) {
+			System.out.println("Au joueur " + this.piece.getJoueur());
+
+			this.piece.move(m);
 		}
-		System.out.println("erreur");
-		return;
 	}
 
-	public boolean winingMove(Coup cp) {
+	public boolean prise() {
 
 		int tmpX, tmpY;
 		tmpX = piece.getX() + piece.getCouleur() * m.getDeltaX();
 		tmpY = piece.getY() + piece.getCouleur() * m.getDeltaY();
 
-		if (Plateau.plateau[tmpX][tmpY].getCouleur() != piece.getCouleur()) {
+		if (this.piece.pieceDeplacable(m) && !this.piece.gagne(m)) {
+
+			if (Plateau.plateau[tmpX][tmpY].getCouleur() != piece.getCouleur()
+					&& Plateau.plateau[tmpX][tmpY].getCode() != '.') {
+
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean coupGagnant() {
+		int tmpX = piece.getX() + piece.getCouleur() * m.getDeltaX();
+		if (tmpX < 0 || tmpX > 7) {
 			return true;
 		}
 		return false;
