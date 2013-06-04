@@ -106,7 +106,7 @@ public class JoueurHumain extends Joueur {
 		coupChoisi = new Coup(p, m);
 		System.out.println(coupChoisi);
 		if (coupInvalide(coupChoisi)) {
-
+			System.out.println("Coup invalide, veuillez recommencer");
 			return coupChoisi();
 		}
 
@@ -124,12 +124,7 @@ public class JoueurHumain extends Joueur {
 	//
 	private boolean coupInvalide(Coup cp) {
 
-		if (!this.getListeCoups().contains(coupChoisi)) {
-
-			System.out.println("Coup invalide, veuillez recommencer");
-			return true;
-		}
-		return false;
+		return (!this.getListeCoups().contains(cp));
 	}
 
 	@Override
