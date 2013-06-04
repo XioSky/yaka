@@ -13,12 +13,12 @@ public class JoueurHumain extends Joueur {
 	}
 
 	/**
-	 * @return Les coordonnées de la pièce si elles sont valides
+	 * @return Les coordonnï¿½es de la piï¿½ce si elles sont valides
 	 */
 	public int[] entrerCoordonnees() {
 		int pos[] = new int[2];
 		String coordonnees;
-		System.out.println("Entrez la pièce à bouger (ex : 2e ou e2, etc) ");
+		System.out.println("Entrez la piÃ¨ce Ã  bouger (ex : 2e ou e2, etc) ");
 		coordonnees = sc.next();
 		if (coordonnees.length() != 2) {
 			return entrerCoordonnees();
@@ -32,12 +32,15 @@ public class JoueurHumain extends Joueur {
 				pos[0] = coordonnees.charAt(0) - '1';
 			}
 		}
-		while (Plateau.plateau[pos[0]][pos[1]].getCouleur() != this.getCouleur()) {
-
-			pos = entrerCoordonnees();
-			System.out
-					.println("piece selectionnée invalide, veuillez entrer des coordonnées correctes ");
+		if ( (pos[0]>=0&&pos[0]<8) && (pos[1]>=0&&pos[1]<8)) { //evite un nullpointer exception si l'utilisateur entre quelque chose comme 9n ou mÃªme 99 
+			if(Plateau.plateau[pos[0]][pos[1]].getCouleur() != this.getCouleur()) {
+				System.out.println("piece selectionnÃ©e invalide, veuillez entrer des coordonnÃ©es correctes ");
+				return entrerCoordonnees();
+			}
+		} else {
+			System.out.println("Coordonnees invalides, veuillez entrer des coordonnÃ©es correctes ");
 			return entrerCoordonnees();
+			
 		}
 
 		return pos;
@@ -73,8 +76,8 @@ public class JoueurHumain extends Joueur {
 		int codeMouvement;
 
 		System.out.println("Entrez code mouvement :  ");
-		// ajouter ici un try catch, pour gérer si l'utilisateur est tellement
-		// con, qu'il rentre une lettre et que ça plante !
+		// ajouter ici un try catch, pour gï¿½rer si l'utilisateur est tellement
+		// con, qu'il rentre une lettre et que ï¿½a plante !
 		// nom de l'exception : InputMismatchException
 		codeMouvement = sc.nextInt();
 
@@ -116,7 +119,7 @@ public class JoueurHumain extends Joueur {
 	 * @return Vrai si le coup n'est pas contenu dans la liste des coups permis
 	 */
 	//    .
-	//   /!\ méthode foireuse : meme en jouant un coup contenu dans la liste, il ne le reconnait pas !!
+	//   /!\ mï¿½thode foireuse : meme en jouant un coup contenu dans la liste, il ne le reconnait pas !!
 	//  /___\
 	//
 	private boolean coupInvalide(Coup cp) {
