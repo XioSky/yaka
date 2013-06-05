@@ -37,7 +37,7 @@ public class ComponentLocation implements ActionListener {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.weighty = 1.0;
 		gbc.weightx = 1.0;
-		for (int j = 0; j < buttons.length; j++) {
+		for (int j = 7; j >= 0; j--) {
 			for (int k = 0; k < buttons[j].length; k++) {
 				buttons[j][k] = new JButton();
 				buttons[j][k].setPreferredSize(new Dimension(41, 41));
