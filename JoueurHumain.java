@@ -13,12 +13,12 @@ public class JoueurHumain extends Joueur {
 	}
 
 	/**
-	 * @return Les coordonnées de la pièce si elles sont valides
+	 * @return Les coordonnÃ©es de la piÃ¨ce si elles sont valides
 	 */
 	public int[] entrerCoordonnees() {
 		int pos[] = new int[2];
 		String coordonnees;
-		System.out.println("Entrez la pièce à bouger (ex : 2e ou e2, etc) ");
+		System.out.println("Entrez la piÃ¨ce Ã  bouger (ex : 2e ou e2, etc) ");
 		coordonnees = sc.next();
 		if (coordonnees.length() != 2) {
 			return entrerCoordonnees();
@@ -33,18 +33,18 @@ public class JoueurHumain extends Joueur {
 			}
 		}
 		// evite un nullpointer exception si l'utilisateur entre quelque chose
-		// comme 9n ou même 99
+		// comme 9n ou mÃªme 99
 		if ((pos[0] < 1 || pos[0] > 7) || (pos[1] < 1 || pos[1] > 7)) {
 
 			System.out
-					.println("piece selectionnée invalide, veuillez entrer des coordonnées correctes ");
+					.println("piece selectionnÃ©e invalide, veuillez entrer des coordonnÃ©es correctes ");
 			return entrerCoordonnees();
 
 		}
 		if (Plateau.plateau[pos[0]][pos[1]].getCouleur() != this.getCouleur()
 				&& Plateau.plateau[pos[0]][pos[1]].getCode() == '.') {
 			System.out
-					.println("piece selectionnée invalide, veuillez entrer des coordonnées correctes ");
+					.println("piece selectionnÃ©e invalide, veuillez entrer des coordonnÃ©es correctes ");
 			return entrerCoordonnees();
 		}
 
@@ -62,7 +62,7 @@ public class JoueurHumain extends Joueur {
 
 		System.out.println("Entrez code mouvement :  ");
 		// ajout d'un try catch(InputMismatchException) inefficace pour une
-		// lettre entrée dans un scanner de nextInt()
+		// lettre entrÃ©e dans un scanner de nextInt()
 		tmp = sc.next();
 		if (tmp.length() != 1 || tmp.charAt(0) < '0' || tmp.charAt(0) > '4') {
 			System.out.println("code mouvement impossible, veuillez en selectionner un autre");
@@ -106,33 +106,23 @@ public class JoueurHumain extends Joueur {
 	}
 
 	/**
+	 * 
+	 * 
 	 * @param cp
 	 *            Un coup
-	 * @return Si le coup peut être joué.
+	 * @return Si le coup peut Ãªtre jouÃ©.
 	 */
-	// Cette méthode n'a pas fonctionné en faisant un iterator de la liste de
-	// coups, qui vérifiait si le coup joué était bien contenu dedans
-	// On opte donc pour une méthode simple à comprendre, à mettre en place, et
+	// Cette mÃ©thode n'a pas fonctionnÃ© en faisant un iterator de la liste de
+	// coups, qui vÃ©rifiait si le coup jouÃ© Ã©tait bien contenu dedans
+	// On opte donc pour une mÃ©thode simple Ã  comprendre, Ã  mettre en place, et
 	// qui est aussi efficace
 	private boolean coupValide(Coup cp) {
 
-		// Si la piece est un rond, on vérifie que le mouvement effectué est
-		// bien contenu dans les mouvements des ronds
-		if (cp.getPiece() instanceof PieceRonde) {
-			for (int i = 0; i < Mouvements.ROUND_MOVES.length; i++) {
-				if ((cp.getMouvement().getDeltaX() == Mouvements.ROUND_MOVES[i].getDeltaX())
-						&& cp.getMouvement().getDeltaY() == Mouvements.ROUND_MOVES[i].getDeltaY()) {
-					return true;
-				}
-			}
-		}
-		// idem que pour ronds
-		if (cp.getPiece() instanceof PieceCarree) {
-			for (int i = 0; i < Mouvements.SQUARE_MOVES.length; i++) {
-				if ((cp.getMouvement().getDeltaX() == Mouvements.SQUARE_MOVES[i].getDeltaX())
-						&& cp.getMouvement().getDeltaY() == Mouvements.SQUARE_MOVES[i].getDeltaY()) {
-					return true;
-				}
+		Mouvement[] mouvementsPossibles = cp.getPiece().getMove();
+		for (int i = 0; i < mouvementsPossibles.length; i++) {
+			if ((cp.getMouvement().getDeltaX() == mouvementsPossibles[i].getDeltaX())
+					&& cp.getMouvement().getDeltaY() == mouvementsPossibles[i].getDeltaY()) {
+				return true;
 			}
 		}
 
