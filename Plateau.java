@@ -23,7 +23,7 @@ public class Plateau {
 					plateau[i][j] = new PieceCarree(i, j, couleur);
 					tracerRond = true;
 				} else {
-					plateau[i][j] = new PieceVide(i, j, 0);
+					plateau[i][j] = new PieceVide(i, j);
 				}
 			}
 			tracerRond = !tracerRond;
